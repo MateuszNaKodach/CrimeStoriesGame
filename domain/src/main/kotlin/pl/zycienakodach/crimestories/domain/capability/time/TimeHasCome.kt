@@ -1,6 +1,6 @@
 package pl.zycienakodach.crimestories.domain.capability.time
 
+import java.time.LocalTime
 
-class TimeHasCome : TimeEvent {
 
-}
+class TimeHasCome(val time: LocalTime) : TimeEvent

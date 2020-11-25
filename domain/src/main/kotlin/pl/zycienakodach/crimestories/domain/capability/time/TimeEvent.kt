@@ -1,4 +1,5 @@
 package pl.zycienakodach.crimestories.domain.capability.time
 
-interface TimeEvent {
-}
+import pl.zycienakodach.crimestories.domain.shared.DomainEvent
+
+interface TimeEvent : DomainEvent

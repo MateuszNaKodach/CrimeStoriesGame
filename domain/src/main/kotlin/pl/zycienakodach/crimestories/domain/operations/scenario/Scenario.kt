@@ -4,7 +4,9 @@ import Characters
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.character
 import pl.zycienakodach.crimestories.domain.capability.item.Item
+import pl.zycienakodach.crimestories.domain.capability.location.Location
 import pl.zycienakodach.crimestories.domain.shared.*
+import java.lang.IllegalArgumentException
 
 val notFoundCharacter = character(CharacterId("NotFound")) { _, _ ->
     CommandResult.onlyMessage("This character not found!")
@@ -20,8 +22,15 @@ abstract class Scenario(
     val characters: Characters,
     val items: List<Item> = listOf(),
     val chainReactions: ChainReactions = mapOf(),
+    val locations: List<Location> = listOf(),
+    val detectiveStartLocation: Location,
     val history: DomainEvents = listOf()
 ) {
 
+    init {
+        if (!locations.contains(detectiveStartLocation)) {
+            throw IllegalArgumentException("Start location is not scenario location!")
+        }
+    }
 
 }

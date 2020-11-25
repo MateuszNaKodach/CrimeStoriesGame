@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.scenarios
+package pl.zycienakodach.crimestories.scenarios.mysterydeath
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

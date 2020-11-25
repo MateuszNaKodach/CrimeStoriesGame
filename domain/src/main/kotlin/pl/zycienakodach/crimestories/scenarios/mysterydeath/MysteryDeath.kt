@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.scenarios
+package pl.zycienakodach.crimestories.scenarios.mysterydeath
 
 import pl.zycienakodach.crimestories.domain.capability.location.*
 import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
@@ -19,6 +19,7 @@ object MysteryDeathScenario : Scenario(
         alice.hasArrived(at = harryHouse),
         harry.wasKilled(by = alice),
         Knife.hasLeft(at = harryHouse),
+        Clothes.hasLeft(at = harryHouse),
         alice.hasGone(from = harryHouse),
         policeman.hasArrived(at = harryHouse),
         TimeHasCome(time = LocalDateTime.of(LocalDate.of(2020,11,25), LocalTime.NOON))

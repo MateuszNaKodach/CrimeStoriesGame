@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.scenarios
+package pl.zycienakodach.crimestories.scenarios.mysterydeath
 
 import pl.zycienakodach.crimestories.domain.capability.location.Location
 import pl.zycienakodach.crimestories.domain.capability.location.LocationId

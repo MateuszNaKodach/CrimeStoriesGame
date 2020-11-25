@@ -3,8 +3,13 @@ package pl.zycienakodach.crimestories.domain.operations.scenario
 import Characters
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.character
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 import pl.zycienakodach.crimestories.domain.capability.item.Item
+import pl.zycienakodach.crimestories.domain.capability.item.ItemId
+import pl.zycienakodach.crimestories.domain.capability.item.ItemWasFound
+import pl.zycienakodach.crimestories.domain.capability.location.ItemHasLeft
 import pl.zycienakodach.crimestories.domain.capability.location.Location
+import pl.zycienakodach.crimestories.domain.capability.location.LocationId
 import pl.zycienakodach.crimestories.domain.shared.*
 import java.lang.IllegalArgumentException
 
@@ -34,3 +39,14 @@ abstract class Scenario(
     }
 
 }
+
+
+fun Item.wasFoundBy(detective: DetectiveId) = ItemWasFound(itemId = this.id, detectiveId = detective)
+
+fun LocationId.itemsIn(history: DomainEvents) =
+    history.fold(emptyList<ItemId>()) { acc, domainEvent ->
+        when (domainEvent) {
+            is ItemHasLeft -> if (domainEvent.at === this) acc.plus(domainEvent.item) else acc
+            else -> acc
+        }
+    }

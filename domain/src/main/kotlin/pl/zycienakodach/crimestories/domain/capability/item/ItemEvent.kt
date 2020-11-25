@@ -13,5 +13,5 @@ interface ItemEvent : DomainEvent{
     val itemId: ItemId
 }
 
-class ItemWasFound(override val itemId: ItemId, val detectiveId: DetectiveId): ItemEvent
-class ItemWasLost(override val itemId: ItemId, val detectiveId: DetectiveId): ItemEvent
+data class ItemWasFound(override val itemId: ItemId, val detectiveId: DetectiveId): ItemEvent
+data class ItemWasLost(override val itemId: ItemId, val detectiveId: DetectiveId): ItemEvent

@@ -14,7 +14,7 @@ abstract class Human(
 ) : Character
 
 
-fun character(id: CharacterId, behaviour: HumanCharacter): HumanCharacter {
+fun character(id: CharacterId, behaviour: CharacterBehaviour): CharacterBehaviour {
     return { command: CharacterCommand, history: DomainEvents ->
         if (command.characterId === id) behaviour(
             command,
@@ -23,4 +23,4 @@ fun character(id: CharacterId, behaviour: HumanCharacter): HumanCharacter {
     }
 }
 
-typealias HumanCharacter = (command: CharacterCommand, history: DomainEvents) -> ICommandResult
+typealias CharacterBehaviour = (command: CharacterCommand, history: DomainEvents) -> ICommandResult

@@ -12,3 +12,13 @@ fun detectivePossessItem(itemId: ItemId, detectiveId: DetectiveId, events: ItemE
             else -> acc
         }
     }
+
+fun wasFound(itemId: ItemId, foundBy: DetectiveId, events: ItemEvents): Boolean =
+    events
+        .filter { it.itemId === itemId }
+        .fold(false) { acc, domainEvent ->
+            when (domainEvent) {
+                is ItemWasFound -> if(domainEvent.detectiveId === foundBy) true else acc
+                else -> acc
+            }
+        }

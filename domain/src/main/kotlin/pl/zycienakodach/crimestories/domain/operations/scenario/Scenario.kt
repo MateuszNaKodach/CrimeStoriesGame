@@ -12,11 +12,14 @@ val notFoundCharacter = character(CharacterId("NotFound")) { _, _ ->
 
 typealias ChainReactions = Map<DomainEvent, DomainEvent>
 
+/**
+ * Add questions and answers. Finish investigation.
+ */
 abstract class Scenario(
     val scenarioId: ScenarioId,
     val characters: Characters,
-    val items: List<Item>,
-    val chainReactions: ChainReactions
+    val items: List<Item> = listOf(),
+    val chainReactions: ChainReactions = mapOf()
 ) {
 
 

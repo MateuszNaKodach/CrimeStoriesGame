@@ -14,3 +14,5 @@ class AskAboutCharacter(override val ask: CharacterId, override val askedBy: Det
 
 class AskAboutItem(override val ask: CharacterId, override val askedBy: DetectiveId, val askAbout: ItemId) :
     CharacterCommand
+
+class LetsChatWith(override val ask: CharacterId, override val askedBy: DetectiveId): CharacterCommand

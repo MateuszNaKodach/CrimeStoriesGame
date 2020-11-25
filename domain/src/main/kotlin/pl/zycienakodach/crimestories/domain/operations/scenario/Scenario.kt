@@ -19,7 +19,8 @@ abstract class Scenario(
     val scenarioId: ScenarioId,
     val characters: Characters,
     val items: List<Item> = listOf(),
-    val chainReactions: ChainReactions = mapOf()
+    val chainReactions: ChainReactions = mapOf(),
+    val history: DomainEvents = listOf()
 ) {
 
 

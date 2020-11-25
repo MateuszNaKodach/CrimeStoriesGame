@@ -10,6 +10,10 @@ import pl.zycienakodach.crimestories.domain.shared.*
  */
 abstract class Investigation(private val scenario: Scenario, var history: DomainEvents = listOf()) {
 
+    init {
+        history = scenario.history
+    }
+
     open fun investigate(command: Command): ICommandResult {
         val result = this.scenario.investigate(command, history)
         history = history.plus(result.events)

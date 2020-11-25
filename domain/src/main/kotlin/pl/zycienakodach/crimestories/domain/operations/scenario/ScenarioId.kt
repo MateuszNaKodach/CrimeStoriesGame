@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.scenario
+package pl.zycienakodach.crimestories.domain.operations.scenario
 
 import pl.zycienakodach.crimestories.domain.shared.StringIdentifier
 

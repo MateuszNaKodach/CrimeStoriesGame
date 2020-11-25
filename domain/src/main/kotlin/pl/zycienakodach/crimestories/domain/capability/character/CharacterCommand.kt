@@ -1,6 +1,6 @@
-package pl.zycienakodach.crimestories.domain.character
+package pl.zycienakodach.crimestories.domain.capability.character
 
-import pl.zycienakodach.crimestories.domain.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 
 interface CharacterCommand{
     val characterId: CharacterId;

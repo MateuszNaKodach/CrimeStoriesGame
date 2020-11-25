@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.detective
+package pl.zycienakodach.crimestories.domain.capability.detective
 
 import pl.zycienakodach.crimestories.domain.shared.StringIdentifier
 

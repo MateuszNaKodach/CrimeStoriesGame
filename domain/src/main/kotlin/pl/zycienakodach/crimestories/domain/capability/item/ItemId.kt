@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.item
+package pl.zycienakodach.crimestories.domain.capability.item
 
 import pl.zycienakodach.crimestories.domain.shared.StringIdentifier
 import java.util.*

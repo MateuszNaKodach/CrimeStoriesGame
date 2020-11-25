@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.character
+package pl.zycienakodach.crimestories.domain.capability.character
 
 import pl.zycienakodach.crimestories.domain.shared.CommandResult
 import pl.zycienakodach.crimestories.domain.shared.ICommandResult

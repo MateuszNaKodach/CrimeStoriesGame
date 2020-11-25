@@ -1,6 +1,6 @@
-package pl.zycienakodach.crimestories.domain.item
+package pl.zycienakodach.crimestories.domain.capability.item
 
-import pl.zycienakodach.crimestories.domain.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 
 fun detectivePossessItem(itemId: ItemId, detectiveId: DetectiveId, events: ItemEvents): Boolean =
     events

@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.time
+package pl.zycienakodach.crimestories.domain.capability.time
 
 typealias Minutes = Int
 

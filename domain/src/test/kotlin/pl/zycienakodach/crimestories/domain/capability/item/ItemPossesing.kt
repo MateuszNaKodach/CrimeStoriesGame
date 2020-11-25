@@ -1,10 +1,10 @@
-package pl.zycienakodach.crimestories.domain.item
+package pl.zycienakodach.crimestories.domain.capability.item
 
 import assertk.assertThat
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
-import pl.zycienakodach.crimestories.domain.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 
 class ProjectionsTest {
 

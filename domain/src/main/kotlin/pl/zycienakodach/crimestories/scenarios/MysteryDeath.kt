@@ -5,11 +5,9 @@ import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioId
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasKilled
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
-
-
-private var cityCenter = Location(LocationId("CityCenter"), "Police Station")
-private var harryHouse = Location(LocationId("London"), "Harry's House")
 
 object MysteryDeathScenario : Scenario(
     scenarioId = ScenarioId("ScenarioId"),
@@ -23,7 +21,7 @@ object MysteryDeathScenario : Scenario(
         Knife.hasLeft(at = harryHouse),
         alice.hasGone(from = harryHouse),
         policeman.hasArrived(at = harryHouse),
-        TimeHasCome(time = LocalTime.NOON)
+        TimeHasCome(time = LocalDateTime.of(LocalDate.of(2020,11,25), LocalTime.NOON))
     )
 )
 

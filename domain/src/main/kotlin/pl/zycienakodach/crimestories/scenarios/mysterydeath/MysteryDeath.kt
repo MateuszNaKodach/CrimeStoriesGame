@@ -30,6 +30,6 @@ object MysteryDeathScenario : Scenario(
 ){
 
     override fun onStartInvestigation(command: StartInvestigation): CommandResult =
-        CommandResult(event = InvestigationStarted(detectiveId = command.detectiveId), storyMessage = "Police is on the crime scene. Neighbour call to you that they have found Harry death body.")
+        CommandResult(event = InvestigationStarted(detectiveId = command.detectiveId), storyMessage = "Police is on the crime scene. Neighbour call to you that they have found Harry death body. His apartment is in city center.")
 }
 

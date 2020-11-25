@@ -11,7 +11,7 @@ val harryHouse = Location(LocationId("London"), "Harry's House") { command, hist
     when (command) {
         is VisitLocation -> CommandResult(
             event = DetectiveMoved(detectiveId = command.detectiveId, to = command.where),
-            storyMessage = "You have visited victims house. Police office is waiting for you here."
+            storyMessage = "You have visited victims house. Police officer is waiting for you here."
         )
         else -> CommandResult.onlyMessage("You cannot do it!")
     }

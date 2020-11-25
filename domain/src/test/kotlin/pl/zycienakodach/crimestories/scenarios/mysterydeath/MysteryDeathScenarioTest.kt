@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import org.junit.jupiter.api.Test
 import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveMoved
 import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
 import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.location.VisitLocation
@@ -18,21 +19,21 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class MysteryDeathScenarioTest {
+val detectiveThomas = DetectiveId("Thomas")
 
-    val detectiveThomas = DetectiveId("Thomas")
+class MysteryDeathScenarioTest {
 
     val investigation = mysteryDeathInvestigation()
 
     @Test
-    fun `detective starts investigation at Police Station`() {
+    fun `scenario action starts at Police Station`() {
         val investigation = mysteryDeathInvestigation()
 
         assertThat(investigation.detectiveLocation()).isEqualTo(policeStation.id)
     }
 
     @Test
-    fun `detective starts investigation on 2020_11_25 at 12_00`() {
+    fun `scenario action starts on 2020_11_25 at 12_00`() {
         val investigation = mysteryDeathInvestigation()
 
         assertThat(investigation.currentTime()).isEqualTo(
@@ -59,28 +60,35 @@ class MysteryDeathScenarioTest {
     @Test
     fun `detective can move to city center`() {
         val investigation = mysteryDeathInvestigation(
-            InvestigationStarted(detectiveThomas)
+            StartInvestigation(detectiveThomas)
         )
 
-        investigation.investigate(VisitLocation(detectiveThomas, where = harryHouse.id))
-
+        assertThat(investigation.investigate(VisitLocation(detectiveThomas, where = harryHouse.id)))
+            .isEqualTo(
+                CommandResult(
+                    event = DetectiveMoved(detectiveThomas, to = harryHouse.id),
+                    storyMessage = "You have visited victims house. Police officer is waiting for you here."
+                )
+            )
         assertThat(investigation.detectiveLocation()).isEqualTo(harryHouse.id)
     }
 
-
-    private fun mysteryDeathInvestigation(vararg event: DomainEvent) =
-        mysteryDeathInvestigation(listOf<DomainEvent>(*event), emptyList())
-
-    private fun mysteryDeathInvestigation(
-        history: DomainEvents = emptyList(),
-        commands: List<Command> = emptyList()
-    ) =
-        SinglePlayerInvestigation(
-            scenario = MysteryDeathScenario,
-            detectiveId = detectiveThomas,
-            history = history
-        ).apply {
-            commands.forEach { investigate(it) }
-        }
-
 }
+
+private fun mysteryDeathInvestigation(vararg event: DomainEvent) =
+    mysteryDeathInvestigation(listOf(*event), emptyList())
+
+private fun mysteryDeathInvestigation(vararg command: Command) =
+    mysteryDeathInvestigation(emptyList(), listOf(*command))
+
+private fun mysteryDeathInvestigation(
+    history: DomainEvents = emptyList(),
+    commands: List<Command> = emptyList()
+) =
+    SinglePlayerInvestigation(
+        scenario = MysteryDeathScenario,
+        detectiveId = detectiveThomas,
+        history = history
+    ).apply {
+        commands.forEach { investigate(it) }
+    }

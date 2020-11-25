@@ -1,4 +1,5 @@
 package pl.zycienakodach.crimestories.domain.time
 
-class MinutesHasPassed : TimeEvent {
-}
+typealias Minutes = Int
+
+class MinutesHasPassed(val minutes: Minutes) : TimeEvent

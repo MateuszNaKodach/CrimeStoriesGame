@@ -1,4 +1,4 @@
-package pl.zycienakodach.crimestories.domain.location
+package pl.zycienakodach.crimestories.cards
 
 interface LocationCard {
 

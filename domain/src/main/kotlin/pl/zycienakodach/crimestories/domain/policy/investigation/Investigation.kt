@@ -8,12 +8,10 @@ import pl.zycienakodach.crimestories.domain.shared.*
 /**
  * Investigation is played scenario.
  */
-abstract class Investigation(private val scenario: Scenario) : HasEvents, HasCommands, HasCommandsResults {
+abstract class Investigation(private val scenario: Scenario, var history: DomainEvents = listOf()) {
 
-    var history: DomainEvents = listOf()
-
-    fun investigate(command: Command): ICommandResult{
-        val result = this.scenario.investigate(command, events)
+    open fun investigate(command: Command): ICommandResult {
+        val result = this.scenario.investigate(command, history)
         history = history.plus(result.events)
         return result
     }
@@ -27,7 +25,5 @@ abstract class Investigation(private val scenario: Scenario) : HasEvents, HasCom
             else -> CommandResult.onlyMessage("You cannot do that!")
         }
 
-    override val events: DomainEvents
-        get() = history
 }
 

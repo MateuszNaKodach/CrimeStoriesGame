@@ -1,12 +1,16 @@
 package pl.zycienakodach.crimestories.domain.capability.character
 
 import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.item.ItemId
 
-interface CharacterCommand{
-    val characterId: CharacterId;
+interface CharacterCommand {
+    val ask: CharacterId;
     val askedBy: DetectiveId
 }
 
-interface AskAboutCharacter : CharacterCommand
 
-interface AskAboutItem : CharacterCommand
+class AskAboutCharacter(override val ask: CharacterId, override val askedBy: DetectiveId, val askAbout: CharacterId) :
+    CharacterCommand
+
+class AskAboutItem(override val ask: CharacterId, override val askedBy: DetectiveId, val askAbout: ItemId) :
+    CharacterCommand

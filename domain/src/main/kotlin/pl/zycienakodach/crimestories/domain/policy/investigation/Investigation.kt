@@ -18,7 +18,7 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
 
     private fun Scenario.investigate(command: Command, investigationHistory: DomainEvents): ICommandResult =
         when (command) {
-            is CharacterCommand -> this.characters.getOrDefault(command.characterId, notFoundCharacter)(
+            is CharacterCommand -> this.characters.getOrDefault(command.ask, notFoundCharacter)(
                 command,
                 investigationHistory
             )

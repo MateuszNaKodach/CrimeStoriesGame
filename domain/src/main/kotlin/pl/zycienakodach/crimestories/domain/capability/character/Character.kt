@@ -16,7 +16,7 @@ abstract class Human(
 
 fun character(id: CharacterId, behaviour: CharacterBehaviour): CharacterBehaviour {
     return { command: CharacterCommand, history: DomainEvents ->
-        if (command.characterId === id) behaviour(
+        if (command.ask === id) behaviour(
             command,
             history
         ) else CommandResult.onlyMessage("This person is not here.")

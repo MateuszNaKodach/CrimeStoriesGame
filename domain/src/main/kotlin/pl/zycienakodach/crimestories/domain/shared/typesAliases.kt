@@ -7,3 +7,5 @@ typealias StoryMessage = String
 
 
 fun DomainEvents.occurred(event: DomainEvent): Boolean = this.contains(event)
+
+fun DomainEvent.inThe(history: DomainEvents) = history.occurred(this)

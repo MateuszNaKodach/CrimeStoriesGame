@@ -5,7 +5,7 @@ interface ICommandResult {
     val storyMessage: StoryMessage
 }
 
-class CommandResult(override val events: DomainEvents, override val storyMessage: StoryMessage) : ICommandResult {
+data class CommandResult(override val events: DomainEvents, override val storyMessage: StoryMessage) : ICommandResult {
 
     constructor(event: DomainEvent, storyMessage: StoryMessage) : this(listOf<DomainEvent>(event), storyMessage)
 

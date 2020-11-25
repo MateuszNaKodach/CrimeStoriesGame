@@ -9,4 +9,6 @@ abstract class LocationCommand(override val detectiveId: DetectiveId) : Command 
 
 class SearchCrimeScene(detectiveId: DetectiveId) : LocationCommand(detectiveId)
 
-class SecureTheEvidence(detectiveId: DetectiveId, val itemId: ItemId): LocationCommand(detectiveId)
+class SecureTheEvidence(detectiveId: DetectiveId, val itemId: ItemId) : LocationCommand(detectiveId)
+
+class VisitLocation(detectiveId: DetectiveId, val where: LocationId) : LocationCommand(detectiveId)

@@ -1,10 +1,13 @@
 package pl.zycienakodach.crimestories.scenarios.mysterydeath
 
+import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
+import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.location.*
 import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioId
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasKilled
+import pl.zycienakodach.crimestories.domain.shared.CommandResult
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -24,5 +27,9 @@ object MysteryDeathScenario : Scenario(
         policeman.hasArrived(at = harryHouse),
         TimeHasCome(time = LocalDateTime.of(LocalDate.of(2020,11,25), LocalTime.NOON))
     )
-)
+){
+
+    override fun onStartInvestigation(command: StartInvestigation): CommandResult =
+        CommandResult(event = InvestigationStarted(detectiveId = command.detectiveId), storyMessage = "Police is on the crime scene. Neighbour call to you that they have found Harry death body.")
+}
 

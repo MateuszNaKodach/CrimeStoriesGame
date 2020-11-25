@@ -1,12 +1,23 @@
 package pl.zycienakodach.crimestories.domain.capability.location
 
+import pl.zycienakodach.crimestories.domain.shared.CommandResult
+import pl.zycienakodach.crimestories.domain.shared.DomainEvents
+
 interface ILocation {
     val id: LocationId
     val name: String
 }
 
-data class Location(override val id: LocationId, override val name: String) : ILocation {
+data class Location(
+    override val id: LocationId,
+    override val name: String,
+    val behaviour: ((command: LocationCommand, history: DomainEvents) -> CommandResult)? = null
+) : ILocation {
     override fun toString(): String = id.raw
+
+    operator fun invoke(command: LocationCommand, history: DomainEvents): CommandResult =
+        behaviour?.invoke(command, history) ?: CommandResult.onlyMessage("You cannot go to this location")
+
 }
 
 object Unknown : ILocation {

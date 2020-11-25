@@ -3,8 +3,8 @@ package pl.zycienakodach.crimestories.scenarios.mysterydeath
 import pl.zycienakodach.crimestories.domain.capability.character.AskAboutItem
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.LetsChatWith
-import pl.zycienakodach.crimestories.domain.capability.item.wasFoundBy
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioCharacter
+import pl.zycienakodach.crimestories.domain.operations.scenario.wasFoundBy
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasKilled
 import pl.zycienakodach.crimestories.domain.shared.CommandResult
 import pl.zycienakodach.crimestories.domain.shared.inThe

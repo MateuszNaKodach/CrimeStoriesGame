@@ -4,6 +4,7 @@ import Characters
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.character
 import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
+import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.item.Item
 import pl.zycienakodach.crimestories.domain.capability.item.ItemId
 import pl.zycienakodach.crimestories.domain.capability.item.ItemWasFound
@@ -37,6 +38,8 @@ abstract class Scenario(
             throw IllegalArgumentException("Start location is not scenario location!")
         }
     }
+
+    abstract fun onStartInvestigation(command: StartInvestigation): CommandResult
 
 }
 

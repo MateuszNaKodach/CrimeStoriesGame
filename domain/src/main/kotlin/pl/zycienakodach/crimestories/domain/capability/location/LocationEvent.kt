@@ -1,10 +1,15 @@
 package pl.zycienakodach.crimestories.domain.capability.location
 
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
+import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveMoved
 import pl.zycienakodach.crimestories.domain.capability.item.Item
 import pl.zycienakodach.crimestories.domain.capability.item.ItemId
+import pl.zycienakodach.crimestories.domain.capability.time.MinutesHasPassed
+import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioCharacter
+import pl.zycienakodach.crimestories.domain.policy.investigation.Investigation
 import pl.zycienakodach.crimestories.domain.shared.DomainEvent
+import java.time.LocalDateTime
 
 interface LocationEvent : DomainEvent {
     val locationId: LocationId
@@ -34,3 +39,13 @@ fun ScenarioCharacter.hasArrived(at: Location) = CharacterHasArrived(at.id, this
 fun ScenarioCharacter.hasGone(from: Location) = CharacterHasGone(from = from.id, this.first)
 
 fun CharacterId.hasArrived(at: LocationId) = CharacterHasArrived(at, this)
+
+
+fun Investigation.detectiveLocation(): LocationId =
+    this.history
+        .fold(Unknown.id) { acc, domainEvent ->
+            when (domainEvent) {
+                is DetectiveMoved -> domainEvent.to
+                else -> acc
+            }
+        }

@@ -13,8 +13,8 @@ object MysteryDeathScenario : Scenario(
     scenarioId = ScenarioId("ScenarioId"),
     characters = mapOf(alice, policeman, harry, labTechnicianJohn),
     items = listOf(Knife, Clothes), //Czy one są potrzebne!?
-    locations = listOf(cityCenter, harryHouse),
-    detectiveStartLocation = cityCenter,
+    locations = listOf(policeStation, harryHouse),
+    detectiveStartLocation = policeStation,
     history = listOf(
         alice.hasArrived(at = harryHouse),
         harry.wasKilled(by = alice),

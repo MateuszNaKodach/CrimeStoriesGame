@@ -5,4 +5,16 @@ interface ILocation {
     val name: String
 }
 
-class Location(override val id: LocationId, override val name: String): ILocation
+data class Location(override val id: LocationId, override val name: String) : ILocation{
+    override fun toString(): String = id.raw
+}
+
+object Unknown : ILocation {
+    override val id: LocationId
+        get() = LocationId("Unknown")
+
+    override val name: String
+        get() = "Unknown"
+
+    override fun toString(): String = "Unknown"
+}

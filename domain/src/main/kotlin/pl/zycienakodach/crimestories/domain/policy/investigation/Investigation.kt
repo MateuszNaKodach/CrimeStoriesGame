@@ -1,6 +1,7 @@
 package pl.zycienakodach.crimestories.domain.policy.investigation
 
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterCommand
+import pl.zycienakodach.crimestories.domain.capability.detective.CloseInvestigation
 import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
 import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.location.VisitLocation
@@ -31,6 +32,7 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
     private fun Scenario.investigate(command: Command, investigationHistory: DomainEvents): ICommandResult =
         when (command) {
             is StartInvestigation -> this.onStartInvestigation(command)
+            is CloseInvestigation -> this.onCloseInvestigation(command)
             is CharacterCommand -> this.characters.getOrDefault(command.ask, notFoundCharacter)(
                 command,
                 investigationHistory

@@ -26,6 +26,10 @@ object MysteryDeathScenario : Scenario(
         alice.hasGone(from = harryHouse),
         policeman.hasArrived(at = harryHouse),
         TimeHasCome(time = LocalDateTime.of(LocalDate.of(2020,11,25), LocalTime.NOON))
+    ),
+    questions = mapOf(
+        "Who has killed Harry?" to alice.first,
+        "What was the murder weapon?" to Knife.id
     )
 ){
 

@@ -3,8 +3,7 @@ package pl.zycienakodach.crimestories.domain.operations.scenario
 import Characters
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.character
-import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
-import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
+import pl.zycienakodach.crimestories.domain.capability.detective.*
 import pl.zycienakodach.crimestories.domain.capability.item.Item
 import pl.zycienakodach.crimestories.domain.capability.item.ItemId
 import pl.zycienakodach.crimestories.domain.capability.item.ItemWasFound
@@ -30,7 +29,8 @@ abstract class Scenario(
     val chainReactions: ChainReactions = mapOf(),
     val locations: List<Location> = listOf(),
     val detectiveStartLocation: Location,
-    val history: DomainEvents = listOf()
+    val history: DomainEvents = listOf(),
+    val questions: Map<Question, Answer> = emptyMap()
 ) {
 
     init {
@@ -40,6 +40,20 @@ abstract class Scenario(
     }
 
     abstract fun onStartInvestigation(command: StartInvestigation): CommandResult
+
+    fun onCloseInvestigation(command: CloseInvestigation): CommandResult {
+        val answers = command.answers;
+        val questionsWithAnswers: Map<Question, GivenAnswer> = questions
+            .map {
+                it.key to GivenAnswer(
+                    answer = answers.getValue(it.key),
+                    isCorrect = answers.getValue(it.key) == questions.getValue(it.key)
+                )
+            }
+            .toMap()
+        val closed = InvestigationClosed(command.detectiveId, questionsWithAnswers)
+        return CommandResult(closed, "You have closed this investigation!")
+    }
 
 }
 

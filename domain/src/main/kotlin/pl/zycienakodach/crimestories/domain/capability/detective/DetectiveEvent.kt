@@ -8,4 +8,9 @@ interface DetectiveEvent : DomainEvent{
 }
 
 data class InvestigationStarted(override val detectiveId: DetectiveId) : DetectiveEvent
+
 data class DetectiveMoved(override val detectiveId: DetectiveId, val to: LocationId): DetectiveEvent
+
+data class GivenAnswer(val answer: Any, val isCorrect: Boolean)
+
+data class InvestigationClosed(override val detectiveId: DetectiveId, val questionsWithAnswers: Map<Question, GivenAnswer>) : DetectiveEvent

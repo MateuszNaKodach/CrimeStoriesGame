@@ -73,6 +73,7 @@ class MysteryDeathScenarioTest {
         assertThat(investigation.detectiveLocation()).isEqualTo(harryHouse.id)
     }
 
+
 }
 
 private fun mysteryDeathInvestigation(vararg event: DomainEvent) =

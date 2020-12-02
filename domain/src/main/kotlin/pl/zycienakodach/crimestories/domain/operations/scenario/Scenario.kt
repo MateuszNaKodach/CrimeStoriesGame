@@ -7,6 +7,7 @@ import pl.zycienakodach.crimestories.domain.capability.detective.*
 import pl.zycienakodach.crimestories.domain.capability.item.Item
 import pl.zycienakodach.crimestories.domain.capability.item.ItemId
 import pl.zycienakodach.crimestories.domain.capability.item.ItemWasFound
+import pl.zycienakodach.crimestories.domain.capability.location.CrimeSceneSearched
 import pl.zycienakodach.crimestories.domain.capability.location.ItemHasLeft
 import pl.zycienakodach.crimestories.domain.capability.location.Location
 import pl.zycienakodach.crimestories.domain.capability.location.LocationId
@@ -63,6 +64,7 @@ abstract class Scenario(
 
 
 fun Item.wasFoundBy(detective: DetectiveId) = ItemWasFound(itemId = this.id, detectiveId = detective)
+fun Location.wasSearched(by: DetectiveId) = CrimeSceneSearched(at = this.id, by = by)
 
 fun LocationId.itemsIn(history: DomainEvents) =
     history.fold(emptyList<ItemId>()) { acc, domainEvent ->

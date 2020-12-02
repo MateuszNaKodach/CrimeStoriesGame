@@ -11,12 +11,12 @@ interface ILocation {
 data class Location(
     override val id: LocationId,
     override val name: String,
-    val behaviour: ((command: LocationCommand, history: DomainEvents) -> CommandResult)? = null
+    val behaviour: ((state: Location, command: LocationCommand, history: DomainEvents) -> CommandResult)? = null
 ) : ILocation {
     override fun toString(): String = id.raw
 
     operator fun invoke(command: LocationCommand, history: DomainEvents): CommandResult =
-        behaviour?.invoke(command, history) ?: CommandResult.onlyMessage("You cannot go to this location")
+        behaviour?.invoke(this, command, history) ?: CommandResult.onlyMessage("You cannot go to this location")
 
 }
 

@@ -9,3 +9,5 @@ interface DetectiveCommand : Command
 
 data class StartInvestigation(override val detectiveId: DetectiveId) : DetectiveCommand
 data class CloseInvestigation(override val detectiveId: DetectiveId, val answers: Map<Question, Any>) : DetectiveCommand
+
+

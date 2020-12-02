@@ -4,6 +4,7 @@ import pl.zycienakodach.crimestories.domain.capability.character.CharacterComman
 import pl.zycienakodach.crimestories.domain.capability.detective.CloseInvestigation
 import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
 import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
+import pl.zycienakodach.crimestories.domain.capability.detective.isClosed
 import pl.zycienakodach.crimestories.domain.capability.location.VisitLocation
 import pl.zycienakodach.crimestories.domain.capability.location.detectiveLocation
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
@@ -20,6 +21,9 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
     }
 
     open fun investigate(command: Command): ICommandResult {
+        if(isClosed()){
+            return CommandResult.onlyMessage("You have already closed this investigation!")
+        }
         if (!isStarted()) {
             return CommandResult.onlyMessage("Start investigation before doing anything!")
         }

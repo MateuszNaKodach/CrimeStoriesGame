@@ -24,7 +24,7 @@ Zwraca osoby, do których można zadzwonić z jakiekolwiek miejsca. Zazwyczaj s�
 **GET: investigations/{investigationId}/detectives/{detectiveId}/items**
 Zwraca przedmioty o jakich wie detektyw. 
 Z informacja czy je znalazl i gdzie.
-Kto jest w ich posiadaniu, jesli wie.
+Kto jest w ich posiadaniu, jesli wie. Moze inny detektyw w multi?
 
 
 

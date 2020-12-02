@@ -5,6 +5,7 @@ import pl.zycienakodach.crimestories.domain.capability.detective.CloseInvestigat
 import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
 import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.location.VisitLocation
+import pl.zycienakodach.crimestories.domain.capability.location.detectiveLocation
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.operations.scenario.notFoundCharacter
 import pl.zycienakodach.crimestories.domain.shared.*
@@ -32,7 +33,12 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
     private fun Scenario.investigate(command: Command, investigationHistory: DomainEvents): ICommandResult =
         when (command) {
             is StartInvestigation -> this.onStartInvestigation(command)
-            is CloseInvestigation -> this.onCloseInvestigation(command)
+            is CloseInvestigation ->
+                if (detectiveLocation() !== scenario.closeInvestigationLocation.id) {
+                    CommandResult.onlyMessage("You can close investigation only at ${scenario.closeInvestigationLocation.name}")
+                } else {
+                    this.onCloseInvestigation(command)
+                }
             is CharacterCommand -> this.characters.getOrDefault(command.ask, notFoundCharacter)(
                 command,
                 investigationHistory

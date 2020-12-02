@@ -29,6 +29,7 @@ abstract class Scenario(
     val chainReactions: ChainReactions = mapOf(),
     val locations: List<Location> = listOf(),
     val detectiveStartLocation: Location,
+    val closeInvestigationLocation: Location,
     val history: DomainEvents = listOf(),
     val questions: Map<Question, Answer> = emptyMap()
 ) {
@@ -36,6 +37,9 @@ abstract class Scenario(
     init {
         if (!locations.contains(detectiveStartLocation)) {
             throw IllegalArgumentException("Start location is not scenario location!")
+        }
+        if(!locations.contains(closeInvestigationLocation)){
+            throw IllegalArgumentException("Close Investigation location is not scenario location!")
         }
     }
 

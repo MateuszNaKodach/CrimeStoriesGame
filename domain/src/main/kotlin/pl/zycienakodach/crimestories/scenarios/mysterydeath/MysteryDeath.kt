@@ -18,6 +18,7 @@ object MysteryDeathScenario : Scenario(
     items = listOf(Knife, Clothes), //Czy one są potrzebne!?
     locations = listOf(policeStation, harryHouse),
     detectiveStartLocation = policeStation,
+    closeInvestigationLocation = policeStation,
     history = listOf(
         alice.hasArrived(at = harryHouse),
         harry.wasKilled(by = alice),

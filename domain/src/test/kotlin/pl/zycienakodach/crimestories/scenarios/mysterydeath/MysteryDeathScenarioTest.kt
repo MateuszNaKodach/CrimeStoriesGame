@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test
 import pl.zycienakodach.crimestories.domain.capability.character.AskAboutCharacter
 import pl.zycienakodach.crimestories.domain.capability.character.AskAboutItem
 import pl.zycienakodach.crimestories.domain.capability.character.LetsChatWith
-import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
-import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveMoved
-import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
-import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
+import pl.zycienakodach.crimestories.domain.capability.detective.*
 import pl.zycienakodach.crimestories.domain.capability.item.ItemWasFound
 import pl.zycienakodach.crimestories.domain.capability.location.*
 import pl.zycienakodach.crimestories.domain.policy.investigation.Investigation
@@ -143,6 +140,70 @@ class MysteryDeathScenarioTest {
         )
     }
 
+    @Test
+    fun `closing investigation is not possible at victim hose`() {
+        mysteryDeathInvestigation(
+            InvestigationStarted(detectiveThomas),
+            DetectiveMoved(detectiveThomas, to = harryHouse.id),
+            CrimeSceneSearched(at = harryHouseId, by = detectiveThomas),
+            ItemWasFound(itemId = Knife.id, detectiveId = detectiveThomas)
+        ).whenDetective(
+            CloseInvestigation(detectiveThomas)
+        ).then(
+            "You can close investigation only at Police Station."
+        )
+    }
+
+    @Test
+    fun `closing investigation - incorrect murdered`() {
+        mysteryDeathInvestigation(
+            InvestigationStarted(detectiveThomas),
+            DetectiveMoved(detectiveThomas, to = harryHouse.id),
+            CrimeSceneSearched(at = harryHouseId, by = detectiveThomas),
+            ItemWasFound(itemId = Knife.id, detectiveId = detectiveThomas),
+            DetectiveMoved(detectiveThomas, to = policeStation.id)
+        ).whenDetective(
+            CloseInvestigation(detectiveThomas,answers = mapOf(
+                "Who has killed Harry?" to harry.first,
+                "What was the murder weapon?" to Knife.id
+            ))
+        ).then(
+            InvestigationClosed(
+                detectiveThomas,
+                questionsWithAnswers = mapOf(
+                    "Who has killed Harry?" to GivenAnswer(harry.first, false),
+                    "What was the murder weapon?" to GivenAnswer(Knife.id, true)
+                )
+            ),
+            "You have closed this investigation!"
+        )
+    }
+
+    @Test
+    fun `closing investigation - correct murdered, alice killed harry by knife`() {
+        mysteryDeathInvestigation(
+            InvestigationStarted(detectiveThomas),
+            DetectiveMoved(detectiveThomas, to = harryHouse.id),
+            CrimeSceneSearched(at = harryHouseId, by = detectiveThomas),
+            ItemWasFound(itemId = Knife.id, detectiveId = detectiveThomas),
+            DetectiveMoved(detectiveThomas, to = policeStation.id)
+        ).whenDetective(
+            CloseInvestigation(detectiveThomas,answers = mapOf(
+                "Who has killed Harry?" to alice.first,
+                "What was the murder weapon?" to Knife.id
+            ))
+        ).then(
+            InvestigationClosed(
+                detectiveThomas,
+                questionsWithAnswers = mapOf(
+                    "Who has killed Harry?" to GivenAnswer(alice.first, true),
+                    "What was the murder weapon?" to GivenAnswer(Knife.id, true)
+                )
+            ),
+            "You have closed this investigation!"
+        )
+    }
+
 }
 
 private fun Investigation.whenDetective(command: Command): ICommandResult = this.investigate(command)
@@ -150,6 +211,7 @@ private fun Investigation.whenDetective(command: Command): ICommandResult = this
 private fun ICommandResult.then(commandResult: CommandResult) = assertThat(this).isEqualTo(commandResult)
 private fun ICommandResult.then(event: DomainEvent, storyMessage: StoryMessage) =
     assertThat(this).isEqualTo(CommandResult(event, storyMessage))
+
 private fun ICommandResult.then(storyMessage: StoryMessage) =
     assertThat(this).isEqualTo(CommandResult.onlyMessage(storyMessage))
 

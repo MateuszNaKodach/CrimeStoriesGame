@@ -40,7 +40,7 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
             is StartInvestigation -> this.onStartInvestigation(command)
             is CloseInvestigation ->
                 if (detectiveLocation() !== scenario.closeInvestigationLocation.id) {
-                    CommandResult.onlyMessage("You can close investigation only at ${scenario.closeInvestigationLocation.name}")
+                    CommandResult.onlyMessage("You can close investigation only at ${scenario.closeInvestigationLocation.name}.")
                 } else {
                     this.onCloseInvestigation(command)
                 }

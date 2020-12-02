@@ -51,8 +51,8 @@ abstract class Scenario(
         val questionsWithAnswers: Map<Question, GivenAnswer> = questions
             .map {
                 it.key to GivenAnswer(
-                    answer = answers.getValue(it.key),
-                    isCorrect = answers.getValue(it.key) == questions.getValue(it.key)
+                    answer = answers[it.key] ?: "Don't know...",
+                    isCorrect = questions.getValue(it.key).equals(answers[it.key])
                 )
             }
             .toMap()

@@ -5,6 +5,7 @@ import pl.zycienakodach.crimestories.domain.capability.detective.CloseInvestigat
 import pl.zycienakodach.crimestories.domain.capability.detective.InvestigationStarted
 import pl.zycienakodach.crimestories.domain.capability.detective.StartInvestigation
 import pl.zycienakodach.crimestories.domain.capability.detective.isClosed
+import pl.zycienakodach.crimestories.domain.capability.location.LocationCommand
 import pl.zycienakodach.crimestories.domain.capability.location.VisitLocation
 import pl.zycienakodach.crimestories.domain.capability.location.detectiveLocation
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
@@ -47,7 +48,7 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
                 command,
                 investigationHistory
             )
-            is VisitLocation -> this.locations.find { it.id === command.where }?.invoke(command, investigationHistory)
+            is LocationCommand -> this.locations.find { it.id === command.locationId }?.invoke(command, investigationHistory)
                 ?: CommandResult.onlyMessage("This is not good choice...")
             else -> CommandResult.onlyMessage("You cannot do that!")
         }

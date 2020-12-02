@@ -23,7 +23,7 @@ val harryHouse = Location(harryHouseId, "Harry's House") { state, command, histo
             if (state.wasSearched(by = command.detectiveId).inThe(history))
                 CommandResult(
                     event = ItemWasFound(itemId = command.itemId, detectiveId = command.detectiveId),
-                    storyMessage = "Item is secured!"
+                    storyMessage = "Item was secured!"
                 )
             else
                 CommandResult.onlyMessage("Try to search crime scene to ")

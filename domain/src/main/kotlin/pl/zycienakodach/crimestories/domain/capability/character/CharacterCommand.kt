@@ -2,10 +2,13 @@ package pl.zycienakodach.crimestories.domain.capability.character
 
 import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 import pl.zycienakodach.crimestories.domain.capability.item.ItemId
+import pl.zycienakodach.crimestories.domain.shared.Command
 
-interface CharacterCommand {
+interface CharacterCommand : Command {
     val ask: CharacterId;
     val askedBy: DetectiveId
+    override val detectiveId: DetectiveId
+        get() = askedBy
 }
 
 

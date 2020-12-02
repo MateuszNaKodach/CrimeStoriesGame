@@ -19,10 +19,12 @@ val alice: ScenarioCharacter = CharacterId("Alice") to { command, history ->
                 } else {
                     CommandResult.onlyMessage("Alice: You cannot ask about item which you have not found.")
                 }
+            } else {
+                CommandResult.onlyMessage("Alice: I dont know anything about it.")
             }
         }
+        else -> CommandResult.onlyMessage("Alice: I'm really scared! My dad was killed by someone...")
     }
-    CommandResult.onlyMessage("Super!")
 }
 
 val policemanId = CharacterId("Policeman")
@@ -50,11 +52,11 @@ val labTechnicianJohn: ScenarioCharacter = CharacterId("LabTechnician") to { com
         is LetsChatWith -> CommandResult.onlyMessage("John: I can tell you something about everything and everything about something.")
         is AskAboutItem -> when (command.askAbout) {
             Knife.id -> when (Knife.wasFoundBy(command.askedBy).inThe(history)) {
-                true -> CommandResult.onlyMessage("John: I need to about 1 hour to investigate this.")
+                true -> CommandResult.onlyMessage("John: On the Knife, I've found fingerprints of Alice - Harry's daughter.")
                 else -> CommandResult.onlyMessage("John: You must bring it to me.")
             }
             else -> CommandResult.onlyMessage("John: I don't know anything about that.")
         }
+        else -> CommandResult.onlyMessage("John: I cannot help you with that.")
     }
-    CommandResult.onlyMessage("John: I cannot help you with that.")
 }

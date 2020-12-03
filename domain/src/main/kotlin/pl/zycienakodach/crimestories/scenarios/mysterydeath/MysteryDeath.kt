@@ -29,7 +29,7 @@ object MysteryDeathScenario : Scenario(
         TimeHasCome(time = LocalDateTime.of(LocalDate.of(2020,11,25), LocalTime.NOON))
     ),
     questions = mapOf(
-        "Who has killed Harry?" to alice.first,
+        "Who has killed Harry?" to aliceId,
         "What was the murder weapon?" to Knife.id
     )
 ){

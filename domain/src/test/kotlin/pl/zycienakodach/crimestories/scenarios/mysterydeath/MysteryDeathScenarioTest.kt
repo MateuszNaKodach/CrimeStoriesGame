@@ -92,7 +92,7 @@ class MysteryDeathScenarioTest {
             InvestigationStarted(detectiveThomas),
             DetectiveMoved(detectiveThomas, to = harryHouse.id)
         ).whenDetective(
-            LetsChatWith(ask = alice.first, askedBy = detectiveThomas)
+            LetsChatWith(ask = aliceId, askedBy = detectiveThomas)
         ).then(
             "Alice: I'm really scared! My dad was killed by someone..."
         )
@@ -120,7 +120,7 @@ class MysteryDeathScenarioTest {
             CrimeSceneSearched(at = harryHouseId, by = detectiveThomas),
             ItemWasFound(itemId = Knife.id, detectiveId = detectiveThomas)
         ).whenDetective(
-            AskAboutItem(ask = alice.first, askedBy = detectiveThomas, askAbout = Knife.id)
+            AskAboutItem(ask = aliceId, askedBy = detectiveThomas, askAbout = Knife.id)
         ).then(
             "Alice: Oh! This knife belongs to my brother."
         )
@@ -134,7 +134,7 @@ class MysteryDeathScenarioTest {
             CrimeSceneSearched(at = harryHouseId, by = detectiveThomas),
             ItemWasFound(itemId = Knife.id, detectiveId = detectiveThomas)
         ).whenDetective(
-            AskAboutItem(ask = labTechnicianJohn.first, askedBy = detectiveThomas, askAbout = Knife.id)
+            AskAboutItem(ask = labTechnicianJohnId, askedBy = detectiveThomas, askAbout = Knife.id)
         ).then(
             "John: On the Knife, I've found fingerprints of Alice - Harry's daughter."
         )
@@ -189,14 +189,14 @@ class MysteryDeathScenarioTest {
             DetectiveMoved(detectiveThomas, to = policeStation.id)
         ).whenDetective(
             CloseInvestigation(detectiveThomas,answers = mapOf(
-                "Who has killed Harry?" to alice.first,
+                "Who has killed Harry?" to aliceId,
                 "What was the murder weapon?" to Knife.id
             ))
         ).then(
             InvestigationClosed(
                 detectiveThomas,
                 questionsWithAnswers = mapOf(
-                    "Who has killed Harry?" to GivenAnswer(alice.first, true),
+                    "Who has killed Harry?" to GivenAnswer(aliceId, true),
                     "What was the murder weapon?" to GivenAnswer(Knife.id, true)
                 )
             ),

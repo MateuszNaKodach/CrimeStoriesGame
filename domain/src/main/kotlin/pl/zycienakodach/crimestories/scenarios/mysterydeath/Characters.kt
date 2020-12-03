@@ -10,7 +10,8 @@ import pl.zycienakodach.crimestories.domain.shared.CommandResult
 import pl.zycienakodach.crimestories.domain.shared.inThe
 
 //TODO: Remove ifs to something like assert in event gwt
-val alice: ScenarioCharacter = CharacterId("Alice") to { command, history ->
+val aliceId = CharacterId("Alice")
+val alice: ScenarioCharacter = aliceId to { command, history ->
     when (command) {
         is AskAboutItem -> {
             if (command.askAbout === Knife.id) {
@@ -47,7 +48,8 @@ val harry: ScenarioCharacter = harryId to { _, history ->
     }
 }
 
-val labTechnicianJohn: ScenarioCharacter = CharacterId("LabTechnician") to { command, history ->
+val labTechnicianJohnId = CharacterId("LabTechnician")
+val labTechnicianJohn: ScenarioCharacter = labTechnicianJohnId to { command, history ->
     when (command) {
         is LetsChatWith -> CommandResult.onlyMessage("John: I can tell you something about everything and everything about something.")
         is AskAboutItem -> when (command.askAbout) {

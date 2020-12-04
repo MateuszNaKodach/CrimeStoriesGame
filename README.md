@@ -42,3 +42,8 @@ SIMPLE VERSION,
 ENDPOINTS:
 
 investigations/{investigationId} - investigation state based on events in JSON!
+
+
+
+//EVENT:
+SCENARIO ID, INVESTIGATION ID itp.

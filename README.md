@@ -34,3 +34,11 @@ Wszystkie komendy jakie wykonał gracz wraz z rezultatem.
 
 **POST: investigations/{investigationId}/detectives/{detectiveId}/commands**
 Pozwala wyslac komende.
+
+
+
+
+SIMPLE VERSION,
+ENDPOINTS:
+
+investigations/{investigationId} - investigation state based on events in JSON!

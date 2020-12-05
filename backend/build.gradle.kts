@@ -13,6 +13,8 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
+	maven("https://repo.spring.io/milestone")
+	maven("https://repo.spring.io/snapshot")
 }
 
 dependencies {
@@ -24,6 +26,16 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+
+	implementation("org.springframework.fu:spring-fu-kofu:0.5.0-SNAPSHOT")
+
+
+	implementation("pl.zycienakodach:kt-time-traveler-spring-boot-starter:0.1.13")
+	implementation("pl.zycienakodach:kt-time-traveler-core:0.1.13")
+	testImplementation("pl.zycienakodach:kt-time-traveler-test:0.1.13")
+
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	//runtimeOnly("io.r2dbc:r2dbc-postgresql")
 	//runtimeOnly("org.postgresql:postgresql")

@@ -1,5 +1,9 @@
 package pl.zycienakodach.criminology
 
+import pl.zycienakodach.crimestories.domain.shared.DomainEvent
+import pl.zycienakodach.crimestories.domain.shared.DomainEvents
+import pl.zycienakodach.crimestories.scenarios.mysterydeath.Knife
+
 
 class Character
 
@@ -7,13 +11,14 @@ class Scenario
 
 //todo: Items in context!
 
-interface ScenarioContext<CharactersType>{
+interface ScenarioContext<CharactersType, ItemsType> {
     val characters: CharactersType
+    val items: ItemsType
 }
 
-class ScenarioDsl<T : ScenarioContext<*>>(init: ScenarioDsl<T>.() -> Unit) {
+class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T>.() -> Unit) {
 
-    val characters = mutableListOf<Character>()
+    //val characters = mutableListOf<Character>()
 
     init {
         init()
@@ -23,20 +28,46 @@ class ScenarioDsl<T : ScenarioContext<*>>(init: ScenarioDsl<T>.() -> Unit) {
 }
 
 
-inline fun <reified T : ScenarioContext<*>> scenario(noinline dsl: ScenarioDsl<T>.() -> Unit) =
-        ScenarioDsl<T>(dsl).build()
+inline fun <reified T : ScenarioContext<*, *>> scenario(context: T, noinline dsl: ScenarioDsl<T>.() -> Unit) =
+        ScenarioDsl<T>(context, dsl).build()
 
 
-fun <T : ScenarioContext<*>> ScenarioDsl<T>.character() {
+inline fun <reified I, reified C, reified T : ScenarioContext<C, I>> ScenarioDsl<T>.character(block: (C) -> Unit) {
+    block(context.characters)
+}
 
+
+typealias CrimeStory = DomainEvents
+inline fun <reified I, reified C, reified T : ScenarioContext<C, I>> ScenarioDsl<T>.crime(block: (characters: C, items: I) -> CrimeStory) {
+    block(context.characters, context.items) //TODO: Add crime story to scenario
 }
 
 data class MysteryScenarioCharacters(val alice: Character)
-
-class MysteryScenarioContext(override val characters: MysteryScenarioCharacters) : ScenarioContext<MysteryScenarioCharacters>
-
+data class MysteryScenarioItems(val knife: Knife)
 
 
-val mysteryScenario: Scenario = scenario<MysteryScenarioContext> {
+class MysteryScenarioContext(override val characters: MysteryScenarioCharacters, override val items: MysteryScenarioItems)
+    : ScenarioContext<MysteryScenarioCharacters, MysteryScenarioItems>
 
+val context = MysteryScenarioContext(
+        characters = MysteryScenarioCharacters(alice = Character()),
+        items = MysteryScenarioItems(knife = Knife)
+)
+
+
+
+
+
+fun story(vararg elements: DomainEvent): CrimeStory = elements.toList()
+
+
+val mysteryScenario: Scenario = scenario(context) {
+
+    crime { (alice), (knife) ->
+        story(
+
+        )
+    }
+
+    character { (alice) -> }
 }

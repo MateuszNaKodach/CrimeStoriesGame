@@ -17,7 +17,10 @@ class SinglePlayerInvestigation(
 ) :
     Investigation(
         scenario,
-        listOf(DetectiveMoved(detectiveId, scenario.detectiveStartLocation.id), InvestigationStarted(detectiveId)).plus(
+        listOf(
+                DetectiveMoved(detectiveId, scenario.detectiveStartLocation.id),
+                InvestigationStarted(detectiveId)
+        ).plus(
             history
         )
     ) {

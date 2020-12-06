@@ -17,6 +17,9 @@ repositories {
 	maven("https://repo.spring.io/snapshot")
 }
 
+val arrowVersion = "1.0.0-SNAPSHOT"
+val timeTravelerVersion = "0.1.15"
+
 dependencies {
 	implementation(project(":domain"))
 	//implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
@@ -31,10 +34,13 @@ dependencies {
 	implementation("org.springframework.fu:spring-fu-kofu:0.5.0-SNAPSHOT")
 
 
-	implementation("pl.zycienakodach:kt-time-traveler-spring-boot-starter:0.1.13")
-	implementation("pl.zycienakodach:kt-time-traveler-core:0.1.13")
-	testImplementation("pl.zycienakodach:kt-time-traveler-test:0.1.13")
+	implementation("pl.zycienakodach:kt-time-traveler-spring-boot-starter:$timeTravelerVersion")
+	implementation("pl.zycienakodach:kt-time-traveler-core:$timeTravelerVersion")
+	testImplementation("pl.zycienakodach:kt-time-traveler-test:$timeTravelerVersion")
 
+	implementation("io.arrow-kt:arrow-fx:$arrowVersion")
+	implementation("io.arrow-kt:arrow-optics:$arrowVersion")
+	implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	//runtimeOnly("io.r2dbc:r2dbc-postgresql")

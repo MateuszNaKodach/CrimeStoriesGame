@@ -1,16 +1,11 @@
 package pl.zycienakodach.kttimetraveler.spring
 
-import org.springframework.boot.autoconfigure.r2dbc.ConnectionFactoryOptionsBuilderCustomizer
-import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.fu.kofu.AbstractDsl
 import org.springframework.fu.kofu.ConfigurationDsl
-import org.springframework.fu.kofu.r2dbc.DataR2dbcDsl
-import org.springframework.fu.kofu.r2dbc.R2dbcDsl
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
-import java.util.LinkedHashMap
 
 class CurrentTimeDsl(private val init: CurrentTimeDsl.() -> Unit) : AbstractDsl() {
 

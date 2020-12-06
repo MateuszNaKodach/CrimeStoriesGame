@@ -1,7 +1,6 @@
 package pl.zycienakodach.crimestoriesgamebackend
 
 import org.springframework.fu.kofu.configuration
-import org.springframework.fu.kofu.r2dbc.r2dbc
 import org.springframework.fu.kofu.reactiveWebApplication
 import org.springframework.fu.kofu.webflux.webFlux
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -10,8 +9,13 @@ import org.springframework.web.reactive.function.server.coRouter
 import org.springframework.web.reactive.function.server.json
 import pl.zycienakodach.crimestories.domain.policy.investigation.Investigation
 import pl.zycienakodach.crimestories.domain.shared.Command
+import pl.zycienakodach.crimestories.domain.shared.DomainEvents
 import pl.zycienakodach.crimestories.domain.shared.ICommandResult
+import pl.zycienakodach.kttimetraveler.core.TimeProvider
 import pl.zycienakodach.kttimetraveler.spring.currentTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 val app = reactiveWebApplication {
     enable(webConfig)
@@ -30,9 +34,6 @@ fun routes() = coRouter {
 
 
 val webConfig = configuration {
-    beans {
-        bean(::routes)
-    }
     webFlux {
         codecs {
             jackson()
@@ -40,8 +41,21 @@ val webConfig = configuration {
         }
     }
     currentTime {
-
+        time = LocalTime.of(15, 0)
+        zone = ZoneId.from(ZoneOffset.UTC)
     }
+    beans {
+        bean(::routes)
+        bean<SampleBean>()
+    }
+}
+
+class SampleBean(private val timeProvider: TimeProvider) {
+
+    init {
+        println(timeProvider.instant)
+    }
+
 }
 
 fun main() {
@@ -49,8 +63,23 @@ fun main() {
 }
 
 //APPLICATION
-interface InvestigationRepository
+interface EventStore
 
 //DOMAIN
 typealias CommandHandler = (investigation: Investigation, command: Command) -> ICommandResult
+
 val investigationCommandHandler: CommandHandler = { investigation, command -> investigation.investigate(command) }
+
+
+interface StoreEventsResult {
+    val stored: DomainEvents
+}
+
+//fun storeEvents(eventStore: EventStore, commandResult: ICommandResult): StoreEventsResult {}
+
+
+//fun execute() { val result = investigationCommandHandler() }
+
+data class CommandHandlerContext(
+        val eventStore: EventStore
+)

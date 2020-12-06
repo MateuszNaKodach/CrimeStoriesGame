@@ -10,3 +10,5 @@ typealias Minutes = Int
 
 class MinutesHasPassed(val minutes: Minutes) : TimeEvent
 class TimeHasCome(val time: LocalDateTime) : TimeEvent
+
+

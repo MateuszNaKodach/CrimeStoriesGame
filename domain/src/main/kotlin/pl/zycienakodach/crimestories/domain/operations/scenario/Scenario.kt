@@ -11,14 +11,17 @@ import pl.zycienakodach.crimestories.domain.capability.location.CrimeSceneSearch
 import pl.zycienakodach.crimestories.domain.capability.location.ItemHasLeft
 import pl.zycienakodach.crimestories.domain.capability.location.Location
 import pl.zycienakodach.crimestories.domain.capability.location.LocationId
+import pl.zycienakodach.crimestories.domain.capability.time.Minutes
 import pl.zycienakodach.crimestories.domain.shared.*
 import java.lang.IllegalArgumentException
+import kotlin.reflect.KClass
 
 val notFoundCharacter = character(CharacterId("NotFound")) { _, _ ->
     CommandResult.onlyMessage("This character not found!")
 }
 
 typealias ChainReactions = Map<DomainEvent, DomainEvent>
+typealias CommandsReactions = Map<KClass<Command>, (Command) -> DomainEvents>
 
 /**
  * Add questions and answers. Finish investigation.
@@ -52,7 +55,7 @@ abstract class Scenario(
             .map {
                 it.key to GivenAnswer(
                     answer = answers[it.key] ?: "Don't know...",
-                    isCorrect = questions.getValue(it.key).equals(answers[it.key])
+                    isCorrect = questions.getValue(it.key) == answers[it.key]
                 )
             }
             .toMap()

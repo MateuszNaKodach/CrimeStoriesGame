@@ -2,25 +2,46 @@ package pl.zycienakodach.criminology
 
 import pl.zycienakodach.crimestories.domain.capability.character.AskAboutItem
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
+import pl.zycienakodach.crimestories.domain.capability.character.LetsChatWith
 import pl.zycienakodach.crimestories.domain.capability.detective.AnyDetectiveId
-import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 import pl.zycienakodach.crimestories.domain.capability.item.Item
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasFound
 import pl.zycienakodach.crimestories.domain.shared.*
 import pl.zycienakodach.crimestories.scenarios.mysterydeath.Knife
 
 
-class Character(val id: CharacterId = CharacterId()) {
+data class WhenCommand(val command: Command, val condition: Condition)
 
-    fun whenAsk(command: Command, askDsl: CharacterAskDsl.() -> Unit = {}) =
+data class Character(val id: CharacterId = CharacterId(), val commandReactions: Map<WhenCommand, CommandResult> = mapOf()) {
+
+    operator fun invoke(dsl: Character.() -> Character): Character {
+        return dsl(this)
+    }
+
+    infix fun whenAsk(command: Command) =
             CharacterAskDsl(this, command)
 
+
+    fun whenChat() =
+            CharacterAskDsl(this, LetsChatWith(ask = this.id, askedBy = AnyDetectiveId))
+
+    infix fun whenChat(result: CommandResultDsl.() -> Unit): Character {
+        val cr = CommandResultDsl()
+        result(cr)
+        val commandResult = cr.build();
+        return this.copy(commandReactions = commandReactions.plus(WhenCommand(LetsChatWith(ask = this.id, askedBy = AnyDetectiveId), NoCondition) to commandResult))
+    }
 
     infix fun whenAskedAbout(item: Item) =
             CharacterAskDsl(this, AskAboutItem(id, askAbout = item.id))
 
+    fun reacts(whenCommand: WhenCommand, result: CommandResult): Character {
+        return this.copy(commandReactions = commandReactions.plus(whenCommand to result))
+    }
 
 }
+
+//class AskSubject(id: StringIdentifier)
 
 typealias Condition = (history: DomainEvents) -> Boolean
 
@@ -67,10 +88,10 @@ data class CharacterAskDsl(
         return this.copy(result = CommandResult.onlyMessage(storyMessage))
     }
 
-    infix fun then(result: CommandResultDsl.() -> Unit): CharacterAskDsl {
+    infix fun then(result: CommandResultDsl.() -> Unit): Character {
         val cr = CommandResultDsl()
         result(cr)
-        return this.copy(result = cr.build())
+        return build(this.copy(result = cr.build()))
     }
 
     fun then(storyMessage: StoryMessage, event: DomainEvent): CharacterAskDsl {
@@ -80,10 +101,16 @@ data class CharacterAskDsl(
     infix fun and(condition: Condition) = this.copy(condition = condition)
 
     infix fun and(event: DomainEvent) = this.copy(condition = all(event))
+
+    private fun build(characterAskDsl: CharacterAskDsl): Character {
+        return character.copy(
+                commandReactions = characterAskDsl.character.commandReactions.plus(WhenCommand(command, condition) to result!!)
+        )
+    }
 }
 
 
-class Scenario
+class CriminologyScenario
 
 //todo: Items in context!
 
@@ -95,13 +122,17 @@ interface ScenarioContext<CharactersType, ItemsType> {
 
 class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T>.() -> Unit) {
 
-    //val characters = mutableListOf<Character>()
+    private val chars = mutableListOf<Character>()
 
     init {
         init()
     }
 
-    fun build() = Scenario()
+    fun build() = CriminologyScenario()
+
+    operator fun plus(character: Character) {
+        this.chars.add(character)
+    }
 }
 
 
@@ -145,20 +176,24 @@ val context = MysteryScenarioContext(
 fun story(vararg elements: DomainEvent): CrimeStory = elements.toList()
 
 
-val mysteryScenario: (detectiveId: DetectiveId) -> Scenario = { detectiveId ->
+val mysteryScenario: (context: MysteryScenarioContext) -> CriminologyScenario = { context ->
+
     scenario(context) {
 
-        crime { (alice), (knife) ->
-            story(
-
-            )
-        }
-
-        characters.alice whenAskedAbout Knife and no(Knife.wasFound) then {
-            storyMessage = "Test1"
+        characters.alice {
+            whenChat {
+                storyMessage = "Alice: What are you ask me about!?"
+            }
+            whenAskedAbout(Knife) then {
+                storyMessage = "Alice: What are you ask me about!?"
+            }
+            whenAskedAbout(Knife) and Knife.wasFound then {
+                storyMessage = "Alice: Ough... this knife belongs to my brother"
+            }
         }
 
     }
+
 }
 
 

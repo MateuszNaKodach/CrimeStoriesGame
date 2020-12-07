@@ -226,7 +226,7 @@ private fun mysteryDeathInvestigation(
     commands: List<Command> = emptyList()
 ) =
     SinglePlayerInvestigation(
-        scenario = MysteryDeathScenario,
+        scenario = mysteryDeathScenario,
         detectiveId = detectiveThomas,
         history = history
     ).apply {

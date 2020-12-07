@@ -30,9 +30,8 @@ abstract class Investigation(private val scenario: Scenario, var history: Domain
         val result = this.scenario.investigate(command, history)
         history = history.plus(result.events)
 
-        val commandReaction = scenario.commandsTypesReactions[command::class]
-        if (commandReaction !== null) {
-            history = history.plus(commandReaction)
+        scenario.commandsTypesReactions[command.commandType]?.let {
+            history = history.plus(it)
         }
 
         return result

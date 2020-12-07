@@ -14,6 +14,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
     implementation("pl.zycienakodach:kt-time-traveler-core:0.1.11")
 
     testImplementation(platform("org.junit:junit-bom:5.7.0"))

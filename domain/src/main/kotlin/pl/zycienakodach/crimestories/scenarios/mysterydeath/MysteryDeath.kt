@@ -7,8 +7,10 @@ import pl.zycienakodach.crimestories.domain.capability.time.MinutesHasPassed
 import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioId
+import pl.zycienakodach.crimestories.domain.operations.scenario.wasFound
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasKilled
 import pl.zycienakodach.crimestories.domain.shared.CommandResult
+import pl.zycienakodach.crimestories.domain.shared.DomainEvent
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -34,11 +36,18 @@ object MysteryDeathScenario : Scenario(
                 "What was the murder weapon?" to Knife.id
         ),
         commandsTypesReactions = mapOf(
-               // SearchCrimeScene::class to MinutesHasPassed(5) //TODO: CommandType string name!
+                SearchCrimeScene.commandType to MinutesHasPassed(5) //TODO: CommandType string name!
         )
 ) {
 
     override fun onStartInvestigation(command: StartInvestigation): CommandResult =
             CommandResult(event = InvestigationStarted(detectiveId = command.detectiveId), storyMessage = "Police is on the crime scene. Neighbour call to you that they have found Harry death body. His apartment is in city center.")
+
+    fun <T : DomainEvent> chainReaction(event: T, reaction: (T) -> DomainEvent) = apply {
+        this.chainReactions[event] = reaction(event)
+    }
 }
+
+val mysteryDeathScenario = MysteryDeathScenario
+        //.chainReaction(Knife.wasFound, {it.})
 

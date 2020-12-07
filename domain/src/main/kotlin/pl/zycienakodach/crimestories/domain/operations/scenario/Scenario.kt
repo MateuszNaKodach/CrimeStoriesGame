@@ -13,14 +13,13 @@ import pl.zycienakodach.crimestories.domain.capability.location.Location
 import pl.zycienakodach.crimestories.domain.capability.location.LocationId
 import pl.zycienakodach.crimestories.domain.shared.*
 import java.lang.IllegalArgumentException
-import kotlin.reflect.KClass
 
 val notFoundCharacter = character(CharacterId("NotFound")) { _, _ ->
     CommandResult.onlyMessage("This character not found!")
 }
 
-typealias ChainReactions = Map<DomainEvent, DomainEvent>
-typealias CommandsTypesReactions = Map<KClass<Command>, DomainEvent>
+typealias ChainReactions = MutableMap<DomainEvent, DomainEvent>
+typealias CommandsTypesReactions = Map<CommandType, DomainEvent>
 
 /**
  * Add questions and answers. Finish investigation.
@@ -29,7 +28,7 @@ abstract class Scenario(
         val scenarioId: ScenarioId,
         val characters: Characters,
         val items: List<Item> = listOf(),
-        val chainReactions: ChainReactions = mapOf(),
+        val chainReactions: ChainReactions = mutableMapOf(),
         val commandsTypesReactions: CommandsTypesReactions = mapOf(),
         val locations: List<Location> = listOf(),
         val detectiveStartLocation: Location,
@@ -57,8 +56,7 @@ abstract class Scenario(
                             answer = answers[it.key] ?: "Don't know...",
                             isCorrect = questions.getValue(it.key) == answers[it.key]
                     )
-                }
-                .toMap()
+                }.toMap()
         val closed = InvestigationClosed(command.detectiveId, questionsWithAnswers)
         return CommandResult(closed, "You have closed this investigation!")
     }

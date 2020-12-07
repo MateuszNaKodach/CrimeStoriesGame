@@ -2,20 +2,22 @@ package pl.zycienakodach.criminology
 
 import pl.zycienakodach.crimestories.domain.capability.character.AskAboutItem
 import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
+import pl.zycienakodach.crimestories.domain.capability.detective.AnyDetectiveId
 import pl.zycienakodach.crimestories.domain.capability.detective.DetectiveId
 import pl.zycienakodach.crimestories.domain.capability.item.Item
+import pl.zycienakodach.crimestories.domain.operations.scenario.wasFound
 import pl.zycienakodach.crimestories.domain.shared.*
 import pl.zycienakodach.crimestories.scenarios.mysterydeath.Knife
 
 
-class Character(val id: CharacterId) {
+class Character(val id: CharacterId = CharacterId()) {
 
     fun whenAsk(command: Command, askDsl: CharacterAskDsl.() -> Unit = {}) =
-            CharacterAskDsl(command)
+            CharacterAskDsl(this, command)
 
 
-    fun whenAskAbout(item: Item, askDsl: CharacterAskDsl.() -> Unit = {}) =
-            CharacterAskDsl(AskAboutItem(id, ))
+    infix fun whenAskedAbout(item: Item) =
+            CharacterAskDsl(this, AskAboutItem(id, askAbout = item.id))
 
 
 }
@@ -24,29 +26,46 @@ typealias Condition = (history: DomainEvents) -> Boolean
 
 fun any(vararg events: DomainEvent): Condition = AnyEventCondition(*events)
 fun all(vararg events: DomainEvent): Condition = AllEventsCondition(*events)
+fun no(vararg events: DomainEvent): Condition = NoEventsCondition(*events)
+
 
 object NoCondition : Condition {
     override fun invoke(history: DomainEvents): Boolean = true
 }
 
 class AllEventsCondition(private vararg val events: DomainEvent) : Condition {
-
     override fun invoke(history: DomainEvents) = events.all { it.inThe(history) }
 }
 
-class AnyEventCondition(private vararg val events: DomainEvent) : Condition {
+class NoEventsCondition(private vararg val events: DomainEvent) : Condition {
+    override fun invoke(history: DomainEvents) = events.none { it.inThe(history) }
+}
 
+class AnyEventCondition(private vararg val events: DomainEvent) : Condition {
     override fun invoke(history: DomainEvents) = events.any { it.inThe(history) }
 }
 
-class CharacterAskDsl(val command: Command, val condition: Condition = NoCondition) {
-    infix fun then(commandResult: CommandResult) {
-
+data class CharacterAskDsl(
+        val character: Character,
+        val command: Command,
+        val condition: Condition = NoCondition,
+        val result: CommandResult? = null
+) {
+    infix fun then(commandResult: CommandResult): CharacterAskDsl {
+        return this.copy(result = commandResult)
     }
 
-    infix fun and(condition: Condition) = CharacterAskDsl(this.command, condition)
+    infix fun then(storyMessage: StoryMessage): CharacterAskDsl {
+        return this.copy(result = CommandResult.onlyMessage(storyMessage))
+    }
 
-    infix fun and(event: DomainEvent) = CharacterAskDsl(this.command, all(event))
+    fun then(storyMessage: StoryMessage, event: DomainEvent): CharacterAskDsl {
+        return this.copy(result = CommandResult(event, storyMessage))
+    }
+
+    infix fun and(condition: Condition) = this.copy(condition = condition)
+
+    infix fun and(event: DomainEvent) = this.copy(condition = all(event))
 }
 
 
@@ -121,8 +140,8 @@ val mysteryScenario: (detectiveId: DetectiveId) -> Scenario = { detectiveId ->
             )
         }
 
-        characters.alice
-                .whenAskAbout(Knife) and
+        characters.alice whenAskedAbout (Knife) and no(Knife.wasFound) then "Test1"
+
     }
 }
 

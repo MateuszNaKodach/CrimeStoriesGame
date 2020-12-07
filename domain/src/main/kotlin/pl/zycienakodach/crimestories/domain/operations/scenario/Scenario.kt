@@ -27,22 +27,22 @@ typealias CommandsReactions = Map<KClass<Command>, (Command) -> DomainEvents>
  * Add questions and answers. Finish investigation.
  */
 abstract class Scenario(
-    val scenarioId: ScenarioId,
-    val characters: Characters,
-    val items: List<Item> = listOf(),
-    val chainReactions: ChainReactions = mapOf(),
-    val locations: List<Location> = listOf(),
-    val detectiveStartLocation: Location,
-    val closeInvestigationLocation: Location,
-    val history: DomainEvents = listOf(),
-    val questions: Map<Question, Answer> = emptyMap()
+        val scenarioId: ScenarioId,
+        val characters: Characters,
+        val items: List<Item> = listOf(),
+        val chainReactions: ChainReactions = mapOf(),
+        val locations: List<Location> = listOf(),
+        val detectiveStartLocation: Location,
+        val closeInvestigationLocation: Location,
+        val history: DomainEvents = listOf(),
+        val questions: Map<Question, Answer> = emptyMap()
 ) {
 
     init {
         if (!locations.contains(detectiveStartLocation)) {
             throw IllegalArgumentException("Start location is not scenario location!")
         }
-        if(!locations.contains(closeInvestigationLocation)){
+        if (!locations.contains(closeInvestigationLocation)) {
             throw IllegalArgumentException("Close Investigation location is not scenario location!")
         }
     }
@@ -52,13 +52,13 @@ abstract class Scenario(
     fun onCloseInvestigation(command: CloseInvestigation): CommandResult {
         val answers = command.answers;
         val questionsWithAnswers: Map<Question, GivenAnswer> = questions
-            .map {
-                it.key to GivenAnswer(
-                    answer = answers[it.key] ?: "Don't know...",
-                    isCorrect = questions.getValue(it.key) == answers[it.key]
-                )
-            }
-            .toMap()
+                .map {
+                    it.key to GivenAnswer(
+                            answer = answers[it.key] ?: "Don't know...",
+                            isCorrect = questions.getValue(it.key) == answers[it.key]
+                    )
+                }
+                .toMap()
         val closed = InvestigationClosed(command.detectiveId, questionsWithAnswers)
         return CommandResult(closed, "You have closed this investigation!")
     }
@@ -67,12 +67,15 @@ abstract class Scenario(
 
 
 fun Item.wasFoundBy(detective: DetectiveId) = ItemWasFound(itemId = this.id, detectiveId = detective)
+val Item.wasFound
+    get() = ItemWasFound(itemId = this.id, detectiveId = AnyDetectiveId)
+
 fun Location.wasSearched(by: DetectiveId) = CrimeSceneSearched(at = this.id, by = by)
 
 fun LocationId.itemsIn(history: DomainEvents) =
-    history.fold(emptyList<ItemId>()) { acc, domainEvent ->
-        when (domainEvent) {
-            is ItemHasLeft -> if (domainEvent.at === this) acc.plus(domainEvent.item) else acc
-            else -> acc
+        history.fold(emptyList<ItemId>()) { acc, domainEvent ->
+            when (domainEvent) {
+                is ItemHasLeft -> if (domainEvent.at === this) acc.plus(domainEvent.item) else acc
+                else -> acc
+            }
         }
-    }

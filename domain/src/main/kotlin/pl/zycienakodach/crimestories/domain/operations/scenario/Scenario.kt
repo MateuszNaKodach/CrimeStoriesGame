@@ -31,6 +31,7 @@ abstract class Scenario(
         val characters: Characters,
         val items: List<Item> = listOf(),
         val chainReactions: ChainReactions = mapOf(),
+        val commandsReactions: CommandsReactions = mapOf(),
         val locations: List<Location> = listOf(),
         val detectiveStartLocation: Location,
         val closeInvestigationLocation: Location,

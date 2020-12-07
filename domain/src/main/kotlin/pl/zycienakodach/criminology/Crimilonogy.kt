@@ -5,9 +5,12 @@ import pl.zycienakodach.crimestories.domain.capability.character.CharacterId
 import pl.zycienakodach.crimestories.domain.capability.character.LetsChatWith
 import pl.zycienakodach.crimestories.domain.capability.detective.AnyDetectiveId
 import pl.zycienakodach.crimestories.domain.capability.item.Item
+import pl.zycienakodach.crimestories.domain.capability.location.SearchCrimeScene
+import pl.zycienakodach.crimestories.domain.capability.time.MinutesHasPassed
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasFound
 import pl.zycienakodach.crimestories.domain.shared.*
 import pl.zycienakodach.crimestories.scenarios.mysterydeath.Knife
+import kotlin.reflect.KClass
 
 
 data class WhenCommand(val command: Command, val condition: Condition)
@@ -130,6 +133,8 @@ interface ScenarioContext<CharactersType, ItemsType> {
 class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T>.() -> Unit) {
 
     private val chars = mutableSetOf<Character>()
+    val reactions = mutableMapOf<KClass<Command>,DomainEvent>()
+
 
     init {
         init()
@@ -158,6 +163,19 @@ class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T
         }
         return character;
     }
+
+    /*inline fun <reified T: DomainEvent> doOnEvery(event: DomainEvent){
+        reactions[T::class] = event
+    }*/
+
+    inline fun <reified T: Command> doOnEvery(event: DomainEvent){
+        @Suppress("UNCHECKED_CAST") val clazz: KClass<Command> = T::class as KClass<Command>
+        reactions[clazz] = event
+    }
+
+    /*fun doOnEvery(clazz: KClass<Command>, event: DomainEvent){
+        reactions[clazz] = event
+    }*/
 }
 
 
@@ -204,6 +222,7 @@ fun story(vararg elements: DomainEvent): CrimeStory = elements.toList()
 val mysteryScenario: (context: MysteryScenarioContext) -> CriminologyScenario = { context ->
 
     scenario(context) {
+        doOnEvery<SearchCrimeScene>(MinutesHasPassed(5))
 
         characters.alice {
             whenChat {

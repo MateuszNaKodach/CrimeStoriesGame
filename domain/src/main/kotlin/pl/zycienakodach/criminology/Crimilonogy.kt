@@ -14,10 +14,6 @@ data class WhenCommand(val command: Command, val condition: Condition)
 
 data class Character(val id: CharacterId = CharacterId(), val commandReactions: Map<WhenCommand, CommandResult> = mapOf()) {
 
-    operator fun invoke(dsl: Character.() -> Character): Character {
-        return dsl(this)
-    }
-
     infix fun whenAsk(command: Command) =
             CharacterAskDsl(this, command)
 
@@ -38,6 +34,20 @@ data class Character(val id: CharacterId = CharacterId(), val commandReactions: 
     fun reacts(whenCommand: WhenCommand, result: CommandResult): Character {
         return this.copy(commandReactions = commandReactions.plus(whenCommand to result))
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Character) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
 
 }
 
@@ -88,12 +98,6 @@ data class CharacterAskDsl(
         return this.copy(result = CommandResult.onlyMessage(storyMessage))
     }
 
-    infix fun then(result: CommandResultDsl.() -> Unit): Character {
-        val cr = CommandResultDsl()
-        result(cr)
-        return build(this.copy(result = cr.build()))
-    }
-
     fun then(storyMessage: StoryMessage, event: DomainEvent): CharacterAskDsl {
         return this.copy(result = CommandResult(event, storyMessage))
     }
@@ -102,7 +106,7 @@ data class CharacterAskDsl(
 
     infix fun and(event: DomainEvent) = this.copy(condition = all(event))
 
-    private fun build(characterAskDsl: CharacterAskDsl): Character {
+    fun build(characterAskDsl: CharacterAskDsl): Character {
         return character.copy(
                 commandReactions = characterAskDsl.character.commandReactions.plus(WhenCommand(command, condition) to result!!)
         )
@@ -122,7 +126,7 @@ interface ScenarioContext<CharactersType, ItemsType> {
 
 class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T>.() -> Unit) {
 
-    private val chars = mutableListOf<Character>()
+    private val chars = mutableSetOf<Character>()
 
     init {
         init()
@@ -132,6 +136,24 @@ class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T
 
     operator fun plus(character: Character) {
         this.chars.add(character)
+    }
+
+    operator fun Character.invoke(dsl: Character.() -> Character): Character {
+        return dsl(this)
+    }
+
+    infix fun CharacterAskDsl.then(result: CommandResultDsl.() -> Unit): Character {
+        val cr = CommandResultDsl()
+        result(cr)
+        val character = build(this.copy(result = cr.build()))
+        if(!chars.contains(character)){
+            chars.add(character)
+        }else{
+            val found = chars.find { it == character }!!
+            chars.remove(found)
+            //chars.add(found.reacts())
+        }
+        return character;
     }
 }
 

@@ -102,6 +102,9 @@ data class CharacterAskDsl(
         return this.copy(result = CommandResult(event, storyMessage))
     }
 
+    infix fun whenAskedAbout(item: Item) =
+            this.character.whenAskedAbout(item)
+
     infix fun and(condition: Condition) = this.copy(condition = condition)
 
     infix fun and(event: DomainEvent) = this.copy(condition = all(event))
@@ -146,9 +149,9 @@ class ScenarioDsl<T : ScenarioContext<*, *>>(val context: T, init: ScenarioDsl<T
         val cr = CommandResultDsl()
         result(cr)
         val character = build(this.copy(result = cr.build()))
-        if(!chars.contains(character)){
+        if (!chars.contains(character)) {
             chars.add(character)
-        }else{
+        } else {
             val found = chars.find { it == character }!!
             chars.remove(found)
             //chars.add(found.reacts())
@@ -208,11 +211,16 @@ val mysteryScenario: (context: MysteryScenarioContext) -> CriminologyScenario = 
             }
             whenAskedAbout(Knife) then {
                 storyMessage = "Alice: What are you ask me about!?"
+                event = Knife.wasFound
             }
             whenAskedAbout(Knife) and Knife.wasFound then {
                 storyMessage = "Alice: Ough... this knife belongs to my brother"
             }
         }
+
+        characters.alice
+                .whenChat { storyMessage = "Alice: What are you ask me about!?" }
+                .whenAskedAbout(Knife) then { storyMessage = "Alice: What are you ask me about!?" }
 
     }
 

@@ -27,6 +27,7 @@ typealias Condition = (history: DomainEvents) -> Boolean
 fun any(vararg events: DomainEvent): Condition = AnyEventCondition(*events)
 fun all(vararg events: DomainEvent): Condition = AllEventsCondition(*events)
 fun no(vararg events: DomainEvent): Condition = NoEventsCondition(*events)
+//infix fun no(event: DomainEvent): Condition = NoEventsCondition(event)
 
 
 object NoCondition : Condition {
@@ -45,11 +46,18 @@ class AnyEventCondition(private vararg val events: DomainEvent) : Condition {
     override fun invoke(history: DomainEvents) = events.any { it.inThe(history) }
 }
 
+class CommandResultDsl {
+    var storyMessage: StoryMessage? = null
+    var event: DomainEvent? = null
+
+    fun build(): CommandResult = CommandResult(storyMessage = storyMessage!!, events = if (event != null) listOf<DomainEvent>(event!!) else listOf<DomainEvent>())
+}
+
 data class CharacterAskDsl(
-        val character: Character,
-        val command: Command,
-        val condition: Condition = NoCondition,
-        val result: CommandResult? = null
+        private val character: Character,
+        private val command: Command,
+        private val condition: Condition = NoCondition,
+        private val result: CommandResult? = null
 ) {
     infix fun then(commandResult: CommandResult): CharacterAskDsl {
         return this.copy(result = commandResult)
@@ -57,6 +65,12 @@ data class CharacterAskDsl(
 
     infix fun then(storyMessage: StoryMessage): CharacterAskDsl {
         return this.copy(result = CommandResult.onlyMessage(storyMessage))
+    }
+
+    infix fun then(result: CommandResultDsl.() -> Unit): CharacterAskDsl {
+        val cr = CommandResultDsl()
+        result(cr)
+        return this.copy(result = cr.build())
     }
 
     fun then(storyMessage: StoryMessage, event: DomainEvent): CharacterAskDsl {
@@ -140,7 +154,9 @@ val mysteryScenario: (detectiveId: DetectiveId) -> Scenario = { detectiveId ->
             )
         }
 
-        characters.alice whenAskedAbout (Knife) and no(Knife.wasFound) then "Test1"
+        characters.alice whenAskedAbout Knife and no(Knife.wasFound) then {
+            storyMessage = "Test1"
+        }
 
     }
 }

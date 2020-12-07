@@ -1,4 +1,4 @@
 ````kotlin
-val scenarioName = Scenario<
+when {AskAboutItem()} and {  } then {  }
 
 ````

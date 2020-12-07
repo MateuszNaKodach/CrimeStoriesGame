@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
+//FIXME: Something is wrong with the zone
 class CurrentTimeDsl(private val init: CurrentTimeDsl.() -> Unit) : AbstractDsl() {
 
     var fixed: Boolean = false

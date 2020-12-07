@@ -15,6 +15,8 @@ repositories {
 	mavenCentral()
 	maven("https://repo.spring.io/milestone")
 	maven("https://repo.spring.io/snapshot")
+	maven("https://dl.bintray.com/arrow-kt/arrow-kt/")
+	maven("https://oss.jfrog.org/artifactory/oss-snapshot-local/")
 }
 
 val arrowVersion = "1.0.0-SNAPSHOT"

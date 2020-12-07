@@ -28,6 +28,8 @@ val alice: ScenarioCharacter = aliceId to { command, history ->
     }
 }
 
+
+
 val policemanId = CharacterId("Policeman")
 val policeman: ScenarioCharacter = policemanId to { command, history ->
     val knifeWasFound = Knife.wasFoundBy(command.askedBy)

@@ -1,6 +1,10 @@
 Endpoints:
 
 
+**POST: investigations/{investigationId}/detectives/{detectiveId}/commands**
+Pozwala wyslac komende.
+
+
 **GET: investigations/{investigationId}/detectives/{detectiveId}/locations**
 Zwraca wszystkie odkryte lokalizacje z zaznaczeniem, która jest aktualna.
 Lokalizacja - kiedy jest otwarta (rozkminic jak to bedzie).
@@ -30,12 +34,6 @@ Kto jest w ich posiadaniu, jesli wie. Moze inny detektyw w multi?
 
 **GET: investigations/{investigationId}/detectives/{detectiveId}/commands**
 Wszystkie komendy jakie wykonał gracz wraz z rezultatem.
-
-
-**POST: investigations/{investigationId}/detectives/{detectiveId}/commands**
-Pozwala wyslac komende.
-
-
 
 
 SIMPLE VERSION,

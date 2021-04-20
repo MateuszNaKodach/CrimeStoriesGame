@@ -7,15 +7,12 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyValueAndAwait
 import org.springframework.web.reactive.function.server.coRouter
 import org.springframework.web.reactive.function.server.json
+import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.policy.investigation.Investigation
 import pl.zycienakodach.crimestories.domain.shared.Command
 import pl.zycienakodach.crimestories.domain.shared.DomainEvents
 import pl.zycienakodach.crimestories.domain.shared.ICommandResult
-import pl.zycienakodach.kttimetraveler.core.TimeProvider
-import pl.zycienakodach.kttimetraveler.spring.currentTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZoneOffset
+import pl.zycienakodach.crimestories.scenarios.mysterydeath.mysteryDeathScenario
 
 val app = reactiveWebApplication {
     enable(webConfig)
@@ -32,6 +29,15 @@ fun routes() = coRouter {
     }
 }
 
+sealed class ApplicationCommand {
+    class StartInvestigation()
+}
+
+
+typealias ScenarioId = String
+
+val scenarios = listOf(mysteryDeathScenario)
+
 
 val webConfig = configuration {
     webFlux {
@@ -40,23 +46,21 @@ val webConfig = configuration {
             string()
         }
     }
-    currentTime {
-        time = LocalTime.of(15, 0)
-        zone = ZoneId.from(ZoneOffset.UTC)
-    }
+    //currentTime {
+    //    time = LocalTime.of(15, 0)
+    //    zone = ZoneId.from(ZoneOffset.UTC)
+    //}
     beans {
         bean(::routes)
-        bean<SampleBean>()
+        //bean<SampleBean>()
     }
 }
 
-class SampleBean(private val timeProvider: TimeProvider) {
-
+/*class SampleBean(private val timeProvider: TimeProvider) {
     init {
         println(timeProvider.instant)
     }
-
-}
+}*/
 
 fun main() {
     app.run()

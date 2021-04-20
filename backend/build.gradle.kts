@@ -19,7 +19,7 @@ repositories {
 	maven("https://oss.jfrog.org/artifactory/oss-snapshot-local/")
 }
 
-val arrowVersion = "1.0.0-SNAPSHOT"
+val arrowVersion = "0.11.0"
 val timeTravelerVersion = "0.1.15"
 
 dependencies {

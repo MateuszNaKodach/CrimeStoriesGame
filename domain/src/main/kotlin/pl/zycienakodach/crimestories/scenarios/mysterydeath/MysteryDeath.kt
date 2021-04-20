@@ -7,7 +7,6 @@ import pl.zycienakodach.crimestories.domain.capability.time.MinutesHasPassed
 import pl.zycienakodach.crimestories.domain.capability.time.TimeHasCome
 import pl.zycienakodach.crimestories.domain.operations.scenario.Scenario
 import pl.zycienakodach.crimestories.domain.operations.scenario.ScenarioId
-import pl.zycienakodach.crimestories.domain.operations.scenario.wasFound
 import pl.zycienakodach.crimestories.domain.operations.scenario.wasKilled
 import pl.zycienakodach.crimestories.domain.shared.CommandResult
 import pl.zycienakodach.crimestories.domain.shared.DomainEvent

@@ -1,6 +1,8 @@
-#Crime Stories Kotlin DSL
+# Crime Stories Kotlin DSL
 
 Kotlin DSL to write crime stories while programming.
+
+Leave a star, if you'd like to see this project out and write your own crime story!
 
 Project is in progress.
 Stay tuned for tutorials about Kotlin / DSL / Event-Driven and Event Sourcing and follow me on dev.to:

@@ -252,7 +252,7 @@ private fun mysteryDeathInvestigation(
 ```
 
 Such tests are so easy that even ChatGPT can understand them and give answers for questions based on them:
-![image](https://user-images.githubusercontent.com/18637116/235328015-01efedeb-3867-4b3a-beb1-b0868d521f1b.png)
+![image](https://user-images.githubusercontent.com/18637116/235328059-c9983872-cc9f-4d90-8261-558bb0873514.png)
 
 
 ## Crime Domain-Specific Language is evolving:
